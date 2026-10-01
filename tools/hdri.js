@@ -1,0 +1,14 @@
+const fs=require('fs'),path=require('path');
+const ROOT=path.join(__dirname,'..');
+const t=fs.readFileSync(path.join(ROOT,'assets','index-bdc0e7f9.js'),'utf8');
+const re=/["'][a-z0-9_]+\.hdr["']/g;
+const s=new Set();let m;
+while((m=re.exec(t)))s.add(m[0].slice(1,-1));
+console.log('=== .hdr literais ===');
+[...s].sort().forEach(x=>console.log('  '+x));
+const i=t.indexOf('studio_small_03_1k.hdr');
+console.log('\n=== contexto do mapa de presets ===');
+console.log(t.slice(Math.max(0,i-500),i+900).replace(/\n/g,' '));
+const j=t.indexOf('"/vendor/hdri/"');
+console.log('\n=== contexto de /vendor/hdri/ ===');
+console.log(t.slice(Math.max(0,j-200),j+400).replace(/\n/g,' '));

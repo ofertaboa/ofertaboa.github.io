@@ -1,0 +1,37 @@
+{
+ "abs": [
+  "/px.png",
+  "/nx.png",
+  "/py.png",
+  "/ny.png",
+  "/pz.png",
+  "/nz.png",
+  "/firebase-messaging-sw.js",
+  "/push-sw.js",
+  "/app-icon-192.png",
+  "/manifest.webmanifest?v=2",
+  "/manifest-gerente.webmanifest?v=2"
+ ],
+ "rel": [],
+ "routes": [
+  "${this.prefix}/namespaces",
+  "${this.prefix}/namespaces/${g1(t.namespace)}",
+  "${this.prefix}/namespaces/${xp(t.namespace)}/tables",
+  "${this.prefix}/namespaces/${xp(t.namespace)}/tables/${t.name}",
+  "/",
+  "/auth",
+  "/admin/*",
+  "/gallery",
+  "/pressel",
+  "/gratis",
+  "/join",
+  "/gerente",
+  "*"
+ ],
+ "api": [
+  "/api/broadcast",
+  "/admin",
+  "/gerente",
+  "/admin/*"
+ ]
+}

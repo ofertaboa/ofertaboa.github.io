@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <!-- TODO: Set the document title to the name of your application -->
+    <title>Pinguim PIX ! — Desliza e lucre com o Jogo do Pinguim</title>
+    <meta name="description" content="Pinguin Pix! deslize, salte, e colete moedas para sacar via pix. Colete Diamantes e receba premios em dinheiro." />
+    <!-- Developer www.agencianaweb.com.br -->
+    <meta http-equiv="Content-Language" content="pt-br">
+    <meta name="document-classification" content="Site Institucional">
+    <meta name="REVISIT-AGENCIANAWEB" content="1 days">
+    <meta name="LANGUAGE" content="Portuguese">
+    <meta name="COPYRIGHT" content="www.agencianaweb.com.br">
+    <meta name="robots" content="all"/>
+    <meta name="googlebot" content="all"/>
+    <meta name="audience" content="all">
+    <meta name="copyright" content="Copyright (c) Agencia na Web. Todos os Direitos Reservados.">
+
+    <!-- TODO: Update og:title to match your application name -->
+    <meta property="og:title" content="Pinguim PIX ! — Desliza e lucre com o Jogo do Pinguim" />
+    <meta property="og:description" content="Pinguin Pix! deslize, salte, e colete moedas para sacar via pix. Colete Diamantes e receba premios em dinheiro." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/social/og-image.jpg" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="Goatdev.pro" />
+    <meta name="twitter:image" content="/social/og-image.jpg" />
+    <script>
+      // O iPhone/Safari precisa receber o manifest correto já no carregamento inicial.
+      // /gerente instala o painel do gerente; qualquer outra rota (inclusive /admin)
+      // instala/abre o app principal do jogo.
+      (() => {
+        const isManager =
+          window.location.pathname === "/gerente" ||
+          window.location.pathname.startsWith("/gerente/");
+
+        const manifestHref = isManager
+          ? "/manifest-gerente.webmanifest?v=2"
+          : "/manifest.webmanifest?v=2";
+        const appleTitle = isManager ? "Gerente" : "FrostDash";
+
+        document.write(`<link rel="manifest" href="${manifestHref}">`);
+        document.write(
+          `<meta name="apple-mobile-web-app-title" content="${appleTitle}">`,
+        );
+      })();
+    </script>
+    <meta name="theme-color" content="#0ea5e9" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/app-icon-192.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- Mantemos a status bar translúcida; os layouts do jogo usam safe-area-inset-* para não ficar sob hora/bateria. -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <script>
+      // CRM AbilityPay: os links de campanha chegam com ?ap_click=CODIGO.
+      // Guardamos em cookie de 60 dias no proprio dominio, entao ele viaja
+      // sozinho nas chamadas a API e o backend dispara o postback de
+      // cadastro/deposito sem o bundle precisar saber de nada.
+      (() => {
+        try {
+          const click = new URLSearchParams(location.search).get("ap_click");
+          if (click && /^[A-Za-z0-9_-]{1,64}$/.test(click)) {
+            localStorage.setItem("ap_click", click);
+            document.cookie =
+              "ap_click=" + click + "; max-age=" + 60 * 60 * 24 * 60 +
+              "; path=/; SameSite=Lax; Secure";
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/index-bdc0e7f9.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-IvDGIQMY.css">
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <div style="display:none;"><a href="https://www.agencianaweb.com.br">Agencia na Web</a></div>
+  </body>
+</html>
