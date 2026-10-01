@@ -26,26 +26,6 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="Goatdev.pro" />
     <meta name="twitter:image" content="/social/og-image.jpg" />
-    <script>
-      // O iPhone/Safari precisa receber o manifest correto já no carregamento inicial.
-      // /gerente instala o painel do gerente; qualquer outra rota (inclusive /admin)
-      // instala/abre o app principal do jogo.
-      (() => {
-        const isManager =
-          window.location.pathname === "/gerente" ||
-          window.location.pathname.startsWith("/gerente/");
-
-        const manifestHref = isManager
-          ? "/manifest-gerente.webmanifest?v=2"
-          : "/manifest.webmanifest?v=2";
-        const appleTitle = isManager ? "Gerente" : "FrostDash";
-
-        document.write(`<link rel="manifest" href="${manifestHref}">`);
-        document.write(
-          `<meta name="apple-mobile-web-app-title" content="${appleTitle}">`,
-        );
-      })();
-    </script>
     <meta name="theme-color" content="#0ea5e9" />
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/app-icon-192.png" />
@@ -74,16 +54,30 @@
       // O bundle manda um ping de analytics para /functions/v1/site-beacon;
       // devolvemos 200 sintetico para nao gerar erro de rede.
       (() => {
-        const native = window.fetch;
-        if (!native) return;
-        window.fetch = function (input, init) {
-          const url = typeof input === "string" ? input : (input && input.url) || "";
-          const method = String((init && init.method) || (input && input.method) || "GET").toUpperCase();
-          if (method !== "GET" && url.indexOf("/functions/v1/") !== -1) {
-            return Promise.resolve(new Response("{}", { status: 200, headers: { "Content-Type": "application/json" } }));
-          }
-          return native.apply(this, arguments);
-        };
+        const isBeacon = (u) => String(u).indexOf("/functions/v1/") !== -1;
+        const nativeFetch = window.fetch;
+        if (nativeFetch) {
+          window.fetch = function (input, init) {
+            const url = typeof input === "string" ? input : (input && input.url) || "";
+            const method = String((init && init.method) || (input && input.method) || "GET").toUpperCase();
+            if (method !== "GET" && isBeacon(url)) {
+              return Promise.resolve(new Response("{}", { status: 200, headers: { "Content-Type": "application/json" } }));
+            }
+            return nativeFetch.apply(this, arguments);
+          };
+        }
+        // o bundle tambem manda o mesmo ping via navigator.sendBeacon (ignora fetch)
+        try {
+          const nativeBeacon = Navigator.prototype.sendBeacon;
+          Object.defineProperty(navigator, "sendBeacon", {
+            configurable: true,
+            writable: true,
+            value: function (url, data) {
+              if (isBeacon(url)) return true;
+              return nativeBeacon.call(navigator, url, data);
+            }
+          });
+        } catch (e) {}
       })();
     </script>
     <script type="module" crossorigin src="/assets/index-bdc0e7f9.js"></script>

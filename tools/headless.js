@@ -26,7 +26,7 @@ for(const r of list){
   const erros=lines.filter(l=>!API.test(l)&&FAIL.test(l));
   const api=lines.filter(l=>API.test(l));
   const visible=html.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim().length;
-  const blank=visible<40;
+  const blank=visible<8000;
   const bad=erros.length>0||blank;
   if(bad)fails++;
   console.log((bad?'FALHA ':'OK    ')+r.padEnd(18)+' dom='+String(html.length).padStart(7)+
